@@ -27,6 +27,7 @@ pub fn run() -> Result<(), JsValue> {
 #[wasm_bindgen]
 #[derive(Clone)]
 pub struct Country {
+    id: i32,
     name: char,
     neighbours: Vec<Country>,
     cost: i32,
@@ -35,8 +36,9 @@ pub struct Country {
 
 #[wasm_bindgen]
 impl Country {
-    pub fn new(name: char, cost: i32) -> Country {
+    pub fn new(id: i32, name: char, cost: i32) -> Country {
         Country {
+            id: id,
             name: name,
             neighbours: Vec::new(),
             cost: cost,
@@ -48,6 +50,9 @@ impl Country {
     }
     pub fn addNeighbours(&mut self, country: Country) {
         self.neighbours.push(country);
+    }
+    pub fn cloned(&self) -> Country {
+        return self.clone();
     }
 }
 
@@ -75,6 +80,14 @@ pub fn travel(mut map: Map) -> i32{
     let mut cost: i32 = 0;
     while actual.visited == false {
         actual.setVisited();
+        let preview = actual.clone();
+        for a in 0..map.countries.len(){
+            for b in 0..map.countries[a].neighbours.len(){
+                if map.countries[a].neighbours[b].id == preview.id{
+                    map.countries[a].neighbours[b].setVisited();
+                }
+            }
+        }
         let mut min: i32 = -1;
         let mut index: i32 = -1;
         for i in 0..actual.neighbours.len() {
@@ -90,17 +103,22 @@ pub fn travel(mut map: Map) -> i32{
             }
         }
         if index != -1 {
-            //println!("Se viaja desde {}, a {}, con un costo de {}", actual.name, actual.neighbours[index].name, actual.neighbours[index].cost)
             let newIndex = index as usize;
             actual = actual.neighbours[newIndex].clone();
+            for c in 0..map.countries.len(){
+                if actual.id == map.countries[c].id{
+                    actual = map.countries[c].clone();
+                }
+            }
             cost = cost + actual.cost;
         }
     }
     //println!("Se viaja desde {}, a {}, con un costo de {}", actual.name, initial.name, initial.cost)
     let finalCost:i32 = cost + initial.cost;
-    println!("El costo total del viaje fue de {}", finalCost);
+    //println!("El costo total del viaje fue de {}", finalCost);
     return finalCost;
 }
+
 
 fn set_panic_hook() {
     // When the `console_error_panic_hook` feature is enabled, we can call the

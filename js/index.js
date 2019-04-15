@@ -1,28 +1,28 @@
 import("../crate/pkg").then(module => {
-  const Chile = module.Country.new('Chile', 100);
-  const Peru = module.Country.new('Peru', 200);
-  const Argentina = module.Country.new('Argentina', 300);
-  const Colombia = module.Country.new('Colombia', 400);
+  const Chile = module.Country.new(1, 'Chile', 100);
+  const Peru = module.Country.new(2, 'Peru', 200);
+  const Argentina = module.Country.new(3, 'Argentina', 300);
+  const Colombia = module.Country.new(4, 'Colombia', 400);
   
 
-  Chile.addNeighbours(Peru);
-  Chile.addNeighbours(Argentina);
-  Chile.addNeighbours(Colombia);
-  //Peru.addNeighbours(Chile);
-  Peru.addNeighbours(Argentina);
-  Peru.addNeighbours(Colombia);
-  // Argentina.addNeighbours(Peru);
-  // Argentina.addNeighbours(Chile);
-  // Argentina.addNeighbours(Colombia);
-  // Colombia.addNeighbours(Peru);
-  // Colombia.addNeighbours(Argentina);
-  // Colombia.addNeighbours(Chile);
+  Chile.addNeighbours(Peru.cloned());
+  Chile.addNeighbours(Argentina.cloned());
+  //Chile.addNeighbours(Colombia.cloned());
+  //Peru.addNeighbours(Chile.cloned());
+  //Peru.addNeighbours(Argentina.cloned());
+  Peru.addNeighbours(Colombia.cloned());
+  //Argentina.addNeighbours(Peru.cloned());
+  //Argentina.addNeighbours(Chile.cloned());
+  Argentina.addNeighbours(Colombia.cloned());
+  //Colombia.addNeighbours(Peru.cloned());
+  //Colombia.addNeighbours(Argentina.cloned());
+  Colombia.addNeighbours(Chile.cloned());
 
   const map = module.Map.new();
   map.addCountry(Chile);
-  //map.addCountry(Peru);
-  //map.addCountry(Argentina);
-  //map.addCountry(Colombia);
+  map.addCountry(Peru);
+  map.addCountry(Argentina);
+  map.addCountry(Colombia);
 
   //map.travel();
   // console.log(Chile);
