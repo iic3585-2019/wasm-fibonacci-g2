@@ -103,11 +103,9 @@ pub fn travel(mut map: Map) -> Vec<i32>{
     while actual.visited == false {
         actual.setVisited();
         let preview = actual.clone();
-        //println!("El actual es {}", preview.id);
         for a in 0..map.countries.len(){
             for b in 0..map.countries[a].neighbours.len(){
                 if map.countries[a].neighbours[b].to.id == preview.id{
-                    //println!("El lugar desde donde salgo es {}", map.countries[a].neighbours[b].to.id);
                     map.countries[a].neighbours[b].to.setVisited();
                 } else if map.countries[a].neighbours[b].from.id == preview.id{
                     map.countries[a].neighbours[b].from.setVisited();
@@ -117,8 +115,6 @@ pub fn travel(mut map: Map) -> Vec<i32>{
         let mut min: i32 = -1;
         let mut index: i32 = -1;
         for i in 0..actual.neighbours.len() {
-            //println!("El vecino del for es {}", actual.neighbours[i].to.id);
-            //println!("y su estado de visita es  {}", actual.neighbours[i].to.visited);
             if actual.neighbours[i].to.visited == false {
                 if min == -1 {
                     min = actual.neighbours[i].cost;
@@ -132,21 +128,26 @@ pub fn travel(mut map: Map) -> Vec<i32>{
         }
         if index != -1 {
             let newIndex = index as usize;
+            cost = cost + actual.neighbours[newIndex].cost;
             actual = actual.neighbours[newIndex].to.clone();
-            //println!("El vecino es {}", actual.id);
             for c in 0..map.countries.len(){
                 if actual.id == map.countries[c].id{
                     actual = map.countries[c].clone();
                 }
             }
-            cost = cost + actual.cost;
             path.push(actual.id);
         }
     }
-    //println!("Se viaja desde {}, a {}, con un costo de {}", actual.name, initial.name, initial.cost)
-    let finalCost:i32 = cost + initial.cost;
-    //println!("El costo total del viaje fue de {}", finalCost);
-    //return finalCost;
+    for d in 0..map.countries.len(){
+        for e in 0..map.countries[d].neighbours.len(){
+            if map.countries[d].neighbours[e].from.id == actual.id{
+                if map.countries[d].neighbours[e].to.id == initial.id{
+                    cost = cost + map.countries[d].neighbours[e].cost;
+                }
+            }
+        }
+    }
+    path.push(cost);
     return path;
 }
 

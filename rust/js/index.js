@@ -6,19 +6,28 @@ import("../crate/pkg").then(module => {
 
   const countries = [Chile, Peru, Argentina, Colombia];
 
-  let valor = 100;
+  function randomInt() {
+    return Math.floor(30 + Math.random()*10);
+  }
+
+  const values = [];
+
+
   
   for (const country of countries) {
     for (const neighbour of countries) {
       if (country != neighbour){
-        country.addNeighbours(neighbour.cloned(), valor);
+        const value = randomInt();
+        values.push(value);
+        country.addNeighbours(neighbour.cloned(), value);
         console.log(country);
         console.log(neighbour);
-        console.log(valor);
-        valor += 100;
+        console.log(value);
       }
     }
   }
+
+  console.log(values);
 
   // Chile.addNeighbours(Peru.cloned());
   // Chile.addNeighbours(Argentina.cloned());
