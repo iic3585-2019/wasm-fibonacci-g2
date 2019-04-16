@@ -29,7 +29,7 @@ pub fn run() -> Result<(), JsValue> {
 pub struct Country {
     id: i32,
     name: char,
-    neighbours: Vec<Country>,
+    neighbours: Vec<Connection>,
     cost: i32,
     visited: bool,
 }
@@ -48,13 +48,34 @@ impl Country {
     pub fn setVisited(&mut self) {
         self.visited = true;
     }
-    pub fn addNeighbours(&mut self, country: Country) {
-        self.neighbours.push(country);
+    pub fn addNeighbours(&mut self, country: Country, cost: i32) {
+        self.neighbours.push(Connection::new(self.clone(), country, cost));
     }
     pub fn cloned(&self) -> Country {
         return self.clone();
     }
 }
+
+#[wasm_bindgen]
+#[derive(Clone)]
+pub struct Connection {
+    from: Country,
+    to: Country,
+    cost: i32,
+}
+
+#[wasm_bindgen]
+impl Connection {
+    pub fn new(from: Country, to: Country, cost: i32) -> Connection {
+        Connection {
+            from: from,
+            to: to,
+            cost: cost,
+        }
+    }
+}
+
+
 
 #[wasm_bindgen]
 pub struct Map {
@@ -74,24 +95,27 @@ impl Map {
 }
 
 #[wasm_bindgen]
-pub fn travel(mut map: Map) -> i32{
+pub fn travel(mut map: Map) -> Vec<i32>{
     let initial = map.countries[0].clone();
     let mut actual = initial.clone();
     let mut cost: i32 = 0;
+    let mut path = Vec::new();
     while actual.visited == false {
         actual.setVisited();
         let preview = actual.clone();
         for a in 0..map.countries.len(){
             for b in 0..map.countries[a].neighbours.len(){
-                if map.countries[a].neighbours[b].id == preview.id{
-                    map.countries[a].neighbours[b].setVisited();
+                if map.countries[a].neighbours[b].to.id == preview.id{
+                    map.countries[a].neighbours[b].to.setVisited();
+                } else if map.countries[a].neighbours[b].from.id == preview.id{
+                    map.countries[a].neighbours[b].from.setVisited();
                 }
             }
         }
         let mut min: i32 = -1;
         let mut index: i32 = -1;
         for i in 0..actual.neighbours.len() {
-            if actual.neighbours[i].visited == false {
+            if actual.neighbours[i].to.visited == false {
                 if min == -1 {
                     min = actual.neighbours[i].cost;
                     index = i as i32;
@@ -104,19 +128,27 @@ pub fn travel(mut map: Map) -> i32{
         }
         if index != -1 {
             let newIndex = index as usize;
-            actual = actual.neighbours[newIndex].clone();
+            cost = cost + actual.neighbours[newIndex].cost;
+            actual = actual.neighbours[newIndex].to.clone();
             for c in 0..map.countries.len(){
                 if actual.id == map.countries[c].id{
                     actual = map.countries[c].clone();
                 }
             }
-            cost = cost + actual.cost;
+            path.push(actual.id);
         }
     }
-    //println!("Se viaja desde {}, a {}, con un costo de {}", actual.name, initial.name, initial.cost)
-    let finalCost:i32 = cost + initial.cost;
-    //println!("El costo total del viaje fue de {}", finalCost);
-    return finalCost;
+    for d in 0..map.countries.len(){
+        for e in 0..map.countries[d].neighbours.len(){
+            if map.countries[d].neighbours[e].from.id == actual.id{
+                if map.countries[d].neighbours[e].to.id == initial.id{
+                    cost = cost + map.countries[d].neighbours[e].cost;
+                }
+            }
+        }
+    }
+    path.push(cost);
+    return path;
 }
 
 
