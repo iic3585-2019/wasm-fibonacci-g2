@@ -30,18 +30,16 @@ pub struct Country {
     id: i32,
     name: char,
     neighbours: Vec<Connection>,
-    cost: i32,
     visited: bool,
 }
 
 #[wasm_bindgen]
 impl Country {
-    pub fn new(id: i32, name: char, cost: i32) -> Country {
+    pub fn new(id: i32, name: char) -> Country {
         Country {
             id: id,
             name: name,
             neighbours: Vec::new(),
-            cost: cost,
             visited: false,
         }
     }
