@@ -1,8 +1,8 @@
 Para correr el codigo se necesita instalar:
-```
+
 **emcc**: https://emscripten.org/docs/getting_started/downloads.html
 **python**
-```
+
 
 Luego se dentro de esta carpeta se debe correr el siguiente comando para compilar: 
 ```
