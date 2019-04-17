@@ -25,12 +25,32 @@ function appendToArray(array, number) {
   return Int32ArrayFromHeap(newArrayPointer, array.length + 1);
 }
 
+function appendToLinkedList(array, number) {
+  const _appendToLinkedList = Module.cwrap('appendToLinkedList', 'Int32Array', ['number', 'number', 'number'])
+
+  const buffer = MallocInt32Array(array);
+
+  const newArrayPointer = _appendToLinkedList(buffer, array.length, number);
+
+  return Int32ArrayFromHeap(newArrayPointer, array.length + 1);
+}
+
 function insertToArray(array, number, position) {
   const _insertToArray = Module.cwrap('insertToArray', 'Int32Array', ['number', 'number', 'number', 'number'])
 
   const buffer = MallocInt32Array(array);
 
   const newArrayPointer = _insertToArray(buffer, array.length, number, position);
+
+  return Int32ArrayFromHeap(newArrayPointer, array.length + 1);
+}
+
+function insertToLinkedList(array, number, position) {
+  const _insertToLinkedList = Module.cwrap('insertToLinkedList', 'Int32Array', ['number', 'number', 'number', 'number'])
+
+  const buffer = MallocInt32Array(array);
+
+  const newArrayPointer = _insertToLinkedList(buffer, array.length, number, position);
 
   return Int32ArrayFromHeap(newArrayPointer, array.length + 1);
 }
@@ -45,6 +65,17 @@ function deleteFromArray(array, position) {
   return Int32ArrayFromHeap(newArrayPointer, array.length - 1);
 }
 
+function deleteFromLinkedList(array, position) {
+  const _deleteFromLinkedList = Module.cwrap('deleteFromLinkedList', 'Int32Array', ['number', 'number', 'number'])
+
+  const buffer = MallocInt32Array(array);
+
+  const newArrayPointer = _deleteFromLinkedList(buffer, array.length, position);
+
+  return Int32ArrayFromHeap(newArrayPointer, array.length - 1);
+}
+
+
 function concatenateArrays(leftArray, rightArray) {
   const _concatenateArrays = Module.cwrap('concatenateArrays', 'Int32Array', ['number', 'number', 'number', 'number'])
 
@@ -56,6 +87,17 @@ function concatenateArrays(leftArray, rightArray) {
   return Int32ArrayFromHeap(newArrayPointer, leftArray.length + rightArray.length);
 }
 
+function concatenateLinkedLists(leftArray, rightArray) {
+  const _concatenateLinkedLists = Module.cwrap('concatenateLinkedLists', 'Int32Array', ['number', 'number', 'number', 'number'])
+
+  const leftBuffer = MallocInt32Array(leftArray);
+  const rightBuffer = MallocInt32Array(rightArray);
+
+  const newArrayPointer = _concatenateLinkedLists(leftBuffer, leftArray.length, rightBuffer, rightArray.length);
+
+  return Int32ArrayFromHeap(newArrayPointer, leftArray.length + rightArray.length);
+}
+
 function onRuntimeInitialized() {
   let buffer;
 
@@ -63,15 +105,31 @@ function onRuntimeInitialized() {
   buffer = appendToArray([0, 1, 2, 3, 4], 5)
   console.log(buffer)
 
+  console.log('Append 5 to [0, 1, 2, 3, 4]:')
+  buffer = appendToLinkedList([0, 1, 2, 3, 4], 5)
+  console.log(buffer)
+
   console.log('Insert 5 to [0, 1, 2, 3, 4] in 3:')
   buffer = insertToArray([0, 1, 2, 3, 4], 5, 3)
+  console.log(buffer)
+
+  console.log('Insert 5 to [0, 1, 2, 3, 4] in 3:')
+  buffer = insertToLinkedList([0, 1, 2, 3, 4], 5, 3)
   console.log(buffer)
 
   console.log('Delete 3 from [0, 1, 2, 3, 4]:')
   buffer = deleteFromArray([0, 1, 2, 3, 4], 3)
   console.log(buffer)
 
+  console.log('Delete 3 from [0, 1, 2, 3, 4]:')
+  buffer = deleteFromLinkedList([0, 1, 2, 3, 4], 3)
+  console.log(buffer)
+
   console.log('Concatenate [0, 1, 2, 3, 4] and [5, 6, 7, 8, 9]:')
   buffer = concatenateArrays([0, 1, 2, 3, 4], [5, 6, 7, 8, 9])
+  console.log(buffer)
+
+  console.log('Concatenate [0, 1, 2, 3, 4] and [5, 6, 7, 8, 9]:')
+  buffer = concatenateLinkedLists([0, 1, 2, 3, 4], [5, 6, 7, 8, 9])
   console.log(buffer)
 }
