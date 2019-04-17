@@ -1,34 +1,19 @@
-# 🦀🕸 `rust-webpack-template`
+Para inicializar el modulo de rust primero se debe ejecutar en esta carpeta el comando
 
-> **Kickstart your Rust, WebAssembly, and Webpack project!**
-
-This template is designed for creating monorepo-style Web applications with
-Rust-generated WebAssembly and Webpack without publishing your wasm to NPM.
-
-[**📚 Read this template tutorial! 📚**][template-docs]
-
-Be sure to check out [other `wasm-pack` tutorials online][tutorials] for other
-templates and usages of `wasm-pack`.
-
-[tutorials]: https://rustwasm.github.io/docs/wasm-pack/tutorials/index.html
-[template-docs]: https://rustwasm.github.io/docs/wasm-pack/tutorials/hybrid-applications-with-webpack/index.html
-
-## 🚴 Using This Template
-
-You can use `npm init` to clone this template:
-
-```sh
-npm init rust-webpack my-app
+```
+npm install
 ```
 
-[Afterwards check out the full documentation for exploring it][template-docs].
+Luego
 
-## 🔋 Batteries Included
+```
+npm run build
+```
 
-This template comes pre-configured with all the boilerplate for compiling Rust
-to WebAssembly and hooking into a Webpack build pipeline.
+Y finalmente
 
-* `npm run start` -- Serve the project locally for development at
-  `http://localhost:8080`.
+```
+npm start
+```
 
-* `npm run build` -- Bundle the project (in production mode).
+Con eso el programa estara corriendo en `http://localhost:8080`, si se inspecciona y se accede a la consola del browser se veran los prints alli, para agregar mas paises simplemente se descomenta, los paises creados, se agrega el pais al arreglo `countries` y se descomenta abajo donde se esta agregando el pais al mapa.

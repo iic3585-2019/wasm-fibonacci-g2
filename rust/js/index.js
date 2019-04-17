@@ -3,8 +3,8 @@ import("../crate/pkg").then(module => {
   const Peru = module.Country.new(2, 'Peru');
   const Argentina = module.Country.new(3, 'Argentina');
   const Colombia = module.Country.new(4, 'Colombia');
-  // const Rusia = module.Country.new(5, 'Rusia');
-  // const England = module.Country.new(6, 'England');
+  //const Rusia = module.Country.new(5, 'Rusia');
+  //const England = module.Country.new(6, 'England');
   //const Japon = module.Country.new(7, 'Japon');
   //const Usa = module.Country.new(8, 'Usa');
   //const Germany = module.Country.new(9, 'Germany');
@@ -35,13 +35,13 @@ import("../crate/pkg").then(module => {
   map.addCountry(Peru);
   map.addCountry(Argentina);
   map.addCountry(Colombia);
-  // map.addCountry(Rusia);
-  // map.addCountry(England);
+  //map.addCountry(Rusia);
+  //map.addCountry(England);
   // map.addCountry(Japon);
   // map.addCountry(Usa);
   // map.addCountry(Germany);
-
-
+  console.time('travel');
   console.log(module.travel(map));
+  console.timeEnd('travel');
 
 });
