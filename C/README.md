@@ -1,6 +1,7 @@
 Para correr el codigo se necesita instalar:
 
 **emcc**: https://emscripten.org/docs/getting_started/downloads.html
+
 **python**
 
 
