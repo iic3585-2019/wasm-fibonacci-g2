@@ -1,0 +1,1 @@
+Esta tarea se divide en 2 partes la de `rust` y la de `C`, se deben ingresar a la carpeta respectivas y seguir las instrucciones de los readme respectivos
